@@ -102,7 +102,7 @@ Proof.
   all: specialize (IHl H H0).
   1: apply nat_compare_lt in e0. 2: apply nat_compare_eq in e0. 3: apply nat_compare_gt in e0.
   - rewrite merge_equation in IHl. destruct s.
-    + cbn. apply HdRel_cons; lia.
+    + cbn. apply HdRel_cons. lia.
     + rewrite merge_equation. remember (n ?= b) as cmp.
       destruct cmp; symmetry in Heqcmp; apply HdRel_cons;
       apply HdRel_inv in H1; lia.
