@@ -1,5 +1,5 @@
 Require Import Arith.
-Require Import Omega.
+Require Import Lia.
 Require Import Recdef.
 Require Import List.
 Require Import Program.Tactics.
@@ -23,7 +23,7 @@ Function merge (x : list nat * list nat) {measure pairlen x} : list nat :=
                             end
   end.
 Proof.
-  all: intros; cbn; omega.
+  all: intros; cbn; lia.
 Defined.
 
 Function halve (l : list nat) : list nat * list nat :=
@@ -36,7 +36,7 @@ Function halve (l : list nat) : list nat * list nat :=
 Lemma halve_sum (l : list nat) :
   length l = length (fst (halve l)) + length (snd (halve l)).
 Proof.
-  functional induction (halve l); simpl; omega.
+  functional induction (halve l); simpl; lia.
 Qed.
 
 Function mergesort (l : list nat) {measure length l} : list nat :=
@@ -46,7 +46,7 @@ Function mergesort (l : list nat) {measure length l} : list nat :=
   | a :: (b :: t) => let x := halve l in merge (mergesort (fst x), mergesort (snd x))
   end.
 Proof.
-  all: intros; cbn; rewrite (halve_sum t); omega.
+  all: intros; cbn; rewrite (halve_sum t); lia.
 Defined.
 
 Lemma halve_cons (a b : nat) (l : list nat) : 
@@ -102,20 +102,20 @@ Proof.
   all: specialize (IHl H H0).
   1: apply nat_compare_lt in e0. 2: apply nat_compare_eq in e0. 3: apply nat_compare_gt in e0.
   - rewrite merge_equation in IHl. destruct s.
-    + cbn. apply HdRel_cons; omega.
+    + cbn. apply HdRel_cons; lia.
     + rewrite merge_equation. remember (n ?= b) as cmp.
       destruct cmp; symmetry in Heqcmp; apply HdRel_cons;
-      apply HdRel_inv in H1; omega.
+      apply HdRel_inv in H1; lia.
   - rewrite merge_equation in IHl. destruct s.
-    + cbn. apply HdRel_cons. omega.
+    + cbn. apply HdRel_cons. lia.
     + rewrite merge_equation. remember (n ?= b) as cmp.
       destruct cmp; symmetry in Heqcmp; apply HdRel_cons;
-      apply HdRel_inv in H1; omega.
+      apply HdRel_inv in H1; lia.
   - rewrite merge_equation in IHl. destruct t.
-    + cbn. apply HdRel_cons. omega.
+    + cbn. apply HdRel_cons. lia.
     + rewrite merge_equation. remember (a ?= n) as cmp.
       destruct cmp; apply HdRel_cons;
-      apply HdRel_inv in H1; omega.
+      apply HdRel_inv in H1; lia.
 Qed.
 
 Lemma Sorted_mergesort (l : list nat) :
