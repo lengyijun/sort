@@ -92,6 +92,34 @@ Proof.
   apply Permutation_halve.
 Qed.
 
+
+Lemma Sorted_merge1 (n : nat) (xx : list nat * list nat) :
+     HdRel le n (fst xx)
+  -> HdRel le n (snd xx)
+  -> Sorted le (merge xx)            
+  -> HdRel le n (merge xx).
+Proof.
+  intros.
+  functional induction merge xx.
+  easy.
+  easy.
+  easy.
+
+  simpl in *.
+  econstructor.
+  apply HdRel_inv in H. auto.
+
+  simpl in *.
+  econstructor.
+  apply HdRel_inv in H. auto.
+
+  simpl in *.
+  econstructor.
+  apply HdRel_inv in H0. auto.
+Qed.
+
+
+
 Lemma Sorted_merge (x : list nat * list nat) :
   Sorted le (fst x) -> Sorted le (snd x) -> Sorted le (merge x).
 Proof.
@@ -101,21 +129,9 @@ Proof.
   all: destruct_conjs; apply Sorted_cons; auto.
   all: specialize (IHl H H0).
   1: apply nat_compare_lt in e0. 2: apply nat_compare_eq in e0. 3: apply nat_compare_gt in e0.
-  - rewrite merge_equation in IHl. destruct s.
-    + cbn. apply HdRel_cons. lia.
-    + rewrite merge_equation. remember (n ?= b) as cmp.
-      destruct cmp; symmetry in Heqcmp; apply HdRel_cons;
-      apply HdRel_inv in H1; lia.
-  - rewrite merge_equation in IHl. destruct s.
-    + cbn. apply HdRel_cons. lia.
-    + rewrite merge_equation. remember (n ?= b) as cmp.
-      destruct cmp; symmetry in Heqcmp; apply HdRel_cons;
-      apply HdRel_inv in H1; lia.
-  - rewrite merge_equation in IHl. destruct t.
-    + cbn. apply HdRel_cons. lia.
-    + rewrite merge_equation. remember (a ?= n) as cmp.
-      destruct cmp; apply HdRel_cons;
-      apply HdRel_inv in H1; lia.
+  - apply Sorted_merge1. simpl. auto. simpl. econstructor. lia. auto.
+  - apply Sorted_merge1. simpl. auto. simpl. econstructor. lia. auto.
+  - apply Sorted_merge1. simpl. econstructor. lia. simpl.  auto. auto.
 Qed.
 
 Lemma Sorted_mergesort (l : list nat) :
